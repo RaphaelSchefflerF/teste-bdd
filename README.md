@@ -1,6 +1,6 @@
 # Projeto de Testes Automatizados com Behave e Selenium
 
-Este projeto utiliza o **Behave** (BDD) e o **Selenium** para automatizar uma busca no Google Acadêmico. O processo inclui a navegação pelo Google, acesso ao Google Acadêmico e busca de um termo específico, salvando o título e o link do último resultado acessível em um arquivo CSV.
+Este projeto utiliza o **Behave** (BDD) e o **Selenium** para automatizar uma coleta de dados no Google Acadêmico. O processo inclui a navegação pelo Google, acesso ao Google Acadêmico, busca por um termo específico e coleta de títulos e links de múltiplos artigos acessíveis, que são salvos em um arquivo CSV.
 
 ## Requisitos
 
@@ -37,7 +37,7 @@ A estrutura do projeto é organizada conforme abaixo:
 │   ├── busca_google_academico.feature   # Cenários de testes em BDD para busca no Google Acadêmico
 │   └── steps
 │       └── busca_google_steps.py        # Passos dos cenários implementados em Python
-└── resultados_google_academico.csv      # Arquivo CSV que armazena o último resultado acessível
+└── artigos_google_academico.csv         # Arquivo CSV que armazena os títulos e links coletados
 ```
 
 ## Executando os Testes
@@ -60,20 +60,21 @@ python -m behave
 
 ## Saída dos Testes
 
-Após a execução, o arquivo `resultados_google_academico.csv` será criado com as seguintes informações:
+Após a execução, o arquivo `artigos_google_academico.csv` será criado com as seguintes informações para cada artigo coletado:
 
-- **Busca**: O termo pesquisado no Google Acadêmico.
-- **Último Resultado Acessível**: O título do último artigo acessível encontrado.
-- **Link**: A URL do último artigo acessível.
+- **Título**: O título de cada artigo acessível encontrado na busca.
+- **Link**: A URL de cada artigo.
 
-### Exemplo de `resultados_google_academico.csv`
+### Exemplo de `artigos_google_academico.csv`
 
 ```csv
-Busca,Último Resultado Acessível,Link
-PHP,"Título do último artigo","https://link_do_ultimo_artigo.com"
+Título,Link
+"PHP: Hypertext Preprocessor","https://link_do_artigo1.com"
+"Desenvolvimento de aplicações com PHP","https://link_do_artigo2.com"
 ```
 
 ## Observações
 
 - Verifique se a versão do Chrome instalada é compatível com o ChromeDriver gerenciado pelo `webdriver-manager`.
-- A cada execução, o arquivo `resultados_google_academico.csv` é sobrescrito. Renomeie o arquivo ou mova-o para outra pasta caso queira manter históricos das buscas.
+- O arquivo `artigos_google_academico.csv` será sobrescrito a cada execução. Renomeie o arquivo ou mova-o para outra pasta caso deseje manter um histórico dos artigos coletados.
+- O teste coleta até cinco páginas de artigos por padrão, para evitar sobrecarga. Esse limite pode ser ajustado no código, se necessário.
