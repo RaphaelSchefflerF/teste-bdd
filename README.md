@@ -1,7 +1,3 @@
-Aqui está a versão aprimorada do README pronta para uso em um repositório Git, com formatação Markdown adequada:
-
----
-
 # Projeto de Testes Automatizados com Behave e Selenium
 
 Este projeto utiliza o **Behave** (BDD) e o **Selenium** para automatizar uma busca no Google Acadêmico. O processo inclui a navegação pelo Google, acesso ao Google Acadêmico e busca de um termo específico, salvando o título e o link do último resultado acessível em um arquivo CSV.
@@ -81,7 +77,3 @@ PHP,"Título do último artigo","https://link_do_ultimo_artigo.com"
 
 - Verifique se a versão do Chrome instalada é compatível com o ChromeDriver gerenciado pelo `webdriver-manager`.
 - A cada execução, o arquivo `resultados_google_academico.csv` é sobrescrito. Renomeie o arquivo ou mova-o para outra pasta caso queira manter históricos das buscas.
-
----
-
-Com este README, seu repositório Git estará documentado de forma clara e prática para que outros usuários possam configurar e executar os testes automatizados facilmente.
