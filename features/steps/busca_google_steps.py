@@ -1,10 +1,10 @@
+import csv
 from behave import given, when, then
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-import csv
 
 @given('que o usuário está na página inicial do Google')
 def step_user_on_google_homepage(context):
@@ -36,55 +36,40 @@ def step_user_searches_in_google_academic(context, query):
     search_box.send_keys(Keys.RETURN)
     time.sleep(2)
 
-@then('a quantidade de resultados para "{query}" deve ser salva em um arquivo CSV')
-def step_save_number_of_results_to_csv(context, query):
-    results_info = WebDriverWait(context.driver, 10).until(
-        EC.presence_of_element_located((By.ID, 'gs_ab_md'))
-    )
-    result_text = results_info.text
+@then('o usuário deve coletar títulos e links de artigos em múltiplas páginas e salvar no arquivo CSV')
+def step_collect_articles_and_save_to_csv(context):
+    articles = []
 
-    # Extrai o número de resultados do texto
-    quantidade_resultados = result_text.split()[1]
+    # Limite de páginas para evitar sobrecarga de coleta
+    page_limit = 5  
+    current_page = 1
 
-    # Escreve no arquivo CSV
-    with open("resultados_google_academico.csv", mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(["Busca", "Quantidade de Resultados"])
-        writer.writerow([query, quantidade_resultados])
+    while current_page <= page_limit:
+        # Coleta todos os artigos na página atual
+        results = context.driver.find_elements(By.CSS_SELECTOR, 'h3.gs_rt a')
+        for result in results:
+            title = result.text
+            link = result.get_attribute("href")
+            if title and link:
+                articles.append({"Título": title, "Link": link})
 
-    print(f"Resultados para '{query}': {quantidade_resultados}")
-
-import csv
-
-@then('o usuário deve abrir o último resultado acessível para "{query}" e salvar no arquivo')
-def step_open_and_save_last_accessible_result(context, query):
-    # Continua clicando em "Próxima" até a última página acessível
-    while True:
+        # Verifica se existe um botão "Próxima" para ir à próxima página
         try:
             next_button = WebDriverWait(context.driver, 10).until(
                 EC.presence_of_element_located((By.LINK_TEXT, "Próxima"))
             )
             next_button.click()
-            time.sleep(2)  # Tempo para carregar a próxima página
+            time.sleep(2)
+            current_page += 1
         except:
-            # Se o botão "Próxima" não estiver mais presente, estamos na última página
+            # Sai do loop se não houver próxima página
             break
 
-    # Encontra o último item na última página acessível
-    results = context.driver.find_elements(By.CSS_SELECTOR, 'h3.gs_rt a')
-    if results:
-        last_result = results[-1]
-        last_title = last_result.text
-        last_link = last_result.get_attribute("href")
-        print(f"Abrindo e salvando o último artigo acessível para '{query}':", last_title, last_link)
-        
-        # Clica no último resultado
-        last_result.click()
+    # Salva os artigos em um arquivo CSV
+    with open("artigos_google_academico.csv", mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=["Título", "Link"])
+        writer.writeheader()
+        writer.writerows(articles)
 
-        # Salva o nome e o link do último resultado no arquivo CSV
-        with open("resultados_google_academico.csv", mode="w", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow(["Busca", "Último Resultado Acessível", "Link"])
-            writer.writerow([query, last_title, last_link])
-    else:
-        print("Nenhum resultado encontrado.")
+    # Exibe o número total de artigos coletados
+    print(f"Total de artigos coletados: {len(articles)}")

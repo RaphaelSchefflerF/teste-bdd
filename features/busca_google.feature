@@ -1,11 +1,12 @@
 # language: pt
-Funcionalidade: Pesquisa no Google Acadêmico e abertura do último resultado acessível
-    Como usuário
-    Quero realizar uma busca pelo Google Acadêmico e abrir o último resultado acessível
+Funcionalidade: Coleta de Artigos no Google Acadêmico para Revisão de Literatura
+    Como pesquisador
+    Quero buscar artigos sobre PHP no Google Acadêmico
+    Para coletar títulos e links de artigos para uso em uma revisão de literatura
 
-Cenário: Pesquisar no Google e depois no Google Acadêmico
+Cenário: Coletar múltiplos artigos sobre PHP no Google Acadêmico e salvar em CSV
     Dado que o usuário está na página inicial do Google
     Quando o usuário buscar por "Google Acadêmico"
     E o usuário abre o Google Acadêmico nos resultados
     E o usuário buscar por "PHP" no Google Acadêmico
-    Então o usuário deve abrir o último resultado acessível para "PHP" e salvar no arquivo
+    Então o usuário deve coletar títulos e links de artigos em múltiplas páginas e salvar no arquivo CSV
